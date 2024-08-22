@@ -6,22 +6,61 @@
 #include <string.h>
 #include <direct.h> 
 
+/* 
+ * Changed Commands:
+ * cd         -> changedir
+ * help       -> assist
+ * exit       -> quit
+ * mkdir      -> makedir
+ * rmdir      -> removedir
+ * ls         -> listdir
+ * pwd        -> currworkdir
+ * touch      -> createtouch
+ * rm         -> removefile
+ * cp         -> copyfile
+ * mv         -> movefile
+ */
+
 // Function declarations for built-in shell commands
-int myShell_cd(char **args);
-int myShell_help(char **args);
-int myShell_exit(char **args);
+int myShell_changedir(char **args);
+int myShell_assist(char **args);
+int myShell_quit(char **args);
+int myShell_makedir(char **args);
+int myShell_removedir(char **args);
+int myShell_listdir(char **args);
+int myShell_currworkdir(char **args);
+int myShell_createtouch(char **args);
+int myShell_removefile(char **args);
+int myShell_copyfile(char **args);
+int myShell_movefile(char **args);
 
 // List of built-in commands and their corresponding functions
 char *builtin_str[] = {
-  "cd",
-  "help",
-  "exit"
+  "changedir",
+  "assist",
+  "quit",
+  "makedir",
+  "removedir",
+  "listdir",
+  "currworkdir",
+  "createtouch",
+  "removefile",
+  "copyfile",
+  "movefile"
 };
 
 int (*builtin_func[]) (char **) = {
-  &myShell_cd,
-  &myShell_help,
-  &myShell_exit
+  &myShell_changedir,
+  &myShell_assist,
+  &myShell_quit,
+  &myShell_makedir,
+  &myShell_removedir,
+  &myShell_listdir,
+  &myShell_currworkdir,
+  &myShell_createtouch,
+  &myShell_removefile,
+  &myShell_copyfile,
+  &myShell_movefile
 };
 
 // Get the number of built-in commands
@@ -32,9 +71,9 @@ int myShell_num_builtins() {
 // Implementation of built-in functions
 
 // Change directory
-int myShell_cd(char **args) {
+int myShell_changedir(char **args) {
   if (args[1] == NULL) {
-    fprintf(stderr, "myShell: expected argument to \"cd\"\n");
+    fprintf(stderr, "myShell: expected argument to \"changedir\"\n");
   } else {
     if (_chdir(args[1]) != 0) {
       perror("myShell");
@@ -44,7 +83,7 @@ int myShell_cd(char **args) {
 }
 
 // Print help
-int myShell_help(char **args) {
+int myShell_assist(char **args) {
   printf("Subhojit Bhattacherjee's myShell\n");
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are built-in:\n");
@@ -58,8 +97,100 @@ int myShell_help(char **args) {
 }
 
 // Exit the shell
-int myShell_exit(char **args) {
+int myShell_quit(char **args) {
   return 0;
+}
+
+// Create a directory
+int myShell_makedir(char **args) {
+  if (args[1] == NULL) {
+    fprintf(stderr, "myShell: expected argument to \"makedir\"\n");
+  } else {
+    if (_mkdir(args[1]) != 0) {
+      perror("myShell");
+    }
+  }
+  return 1;
+}
+
+// Remove a directory
+int myShell_removedir(char **args) {
+  if (args[1] == NULL) {
+    fprintf(stderr, "myShell: expected argument to \"removedir\"\n");
+  } else {
+    if (_rmdir(args[1]) != 0) {
+      perror("myShell");
+    }
+  }
+  return 1;
+}
+
+// List directory contents
+int myShell_listdir(char **args) {
+  system("dir"); // Windows equivalent of 'ls'
+  return 1;
+}
+
+// Print current working directory
+int myShell_currworkdir(char **args) {
+  char cwd[1024];
+  if (_getcwd(cwd, sizeof(cwd)) != NULL) {
+    printf("%s\n", cwd);
+  } else {
+    perror("myShell");
+  }
+  return 1;
+}
+
+// Create an empty file
+int myShell_createtouch(char **args) {
+  if (args[1] == NULL) {
+    fprintf(stderr, "myShell: expected argument to \"createtouch\"\n");
+  } else {
+    FILE *file = fopen(args[1], "w");
+    if (file == NULL) {
+      perror("myShell");
+    } else {
+      fclose(file);
+    }
+  }
+  return 1;
+}
+
+// Remove a file
+int myShell_removefile(char **args) {
+  if (args[1] == NULL) {
+    fprintf(stderr, "myShell: expected argument to \"removefile\"\n");
+  } else {
+    if (remove(args[1]) != 0) {
+      perror("myShell");
+    }
+  }
+  return 1;
+}
+
+// Copy a file
+int myShell_copyfile(char **args) {
+  if (args[1] == NULL || args[2] == NULL) {
+    fprintf(stderr, "myShell: expected arguments to \"copyfile\"\n");
+  } else {
+    char command[1024];
+    snprintf(command, sizeof(command), "copy %s %s", args[1], args[2]);
+    system(command);
+  }
+  return 1;
+}
+
+// Move a file
+int myShell_movefile(char **args) {
+  if (args[1] == NULL || args[2] == NULL) {
+    fprintf(stderr, "myShell: expected arguments to \"movefile\"\n");
+  } else {
+    char command[1024];
+    snprintf(command, sizeof(command), "move %s %s", args[1], args[2]);
+    system(command);
+  }
+  return 1;
 }
 
 // Launch a program and wait for it to terminate
