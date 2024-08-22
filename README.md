@@ -5,9 +5,9 @@
 ## Features
 
 - **Built-in Commands:**
-  - `cd`: Change the current directory.
-  - `help`: Display help information about built-in commands.
-  - `exit`: Exit the shell.
+  - `changedir`: Change the current directory.
+  - `assist`: Display help information about built-in commands.
+  - `quit`: Exit the shell.
   
 - **External Command Execution:**
   - Launch external programs and wait for them to complete.
@@ -18,13 +18,15 @@
 - A C compiler (e.g., MinGW)
 
 ## Compilation
+
 To compile `myShell`, you can use a C compiler that supports Windows API. For example, if you're using `gcc` from MinGW, you can run:
 
 ```sh
 gcc -o myShell myShell.c
-
 ```
+
 ## Usage
+
 Open a command prompt and navigate to the directory containing the compiled `myShell.exe` executable.
 
 Run the shell:
@@ -32,31 +34,86 @@ Run the shell:
 ```sh
 myShell.exe
 ```
- - You will be presented with a prompt `>`. 
- - Enter commands and press Enter.
+- You will be presented with a prompt >.
+- Enter commands and press Enter.
+
+### Custom Commands
+- To change the directory, use:
+
+```sh
+changedir <directory>
+```
+
+- To view the help information, use:
+
+```sh
+assist
+```
+
+- To exit the shell, use:
+
+```sh
+quit
+```
+
+- To create a directory, use:
+
+```sh
+makedir <directory>
+```
+
+- To remove a directory, use:
+
+```sh
+removedir <directory>
+```
+
+- To list the contents of the current directory, use:
+
+```sh
+listdir
+```
+
+- To display the current working directory, use:
+
+```sh
+currworkdir
+```
+
+- To create an empty file (touch), use:
+```sh
+createtouch <filename>
+```
+
+- To remove a file, use:
+
+```sh
+removefile <filename>
+```
 
 
-To change the directory, use:
+- To copy a file, use:
+
 ```sh
-cd <directory>
+copyfile <source> <destination>
 ```
-To view the help information, use:
+
+
+- To move a file, use:
 ```sh
-help
+movefile <source> <destination>
 ```
-To exit the shell, use:
-```sh
-exit
-```
-To execute external programs, simply type the program's name and its arguments, if any.
-Example:
+
+### Example Usage
+
 ```sh
 shell
-> cd C:\Users
-> dir
-> help
-> exit
+> changedir C:\Users
+> listdir
+> assist
+> quit
 ```
+
 ## Acknowledgements
   - Inspired by educational resources on shell development.
   - Uses Windows API for process management and directory operations.
